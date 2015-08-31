@@ -1,24 +1,32 @@
-ke sure the agent is an executable
+#!/bin/bash
+
+# Make sure the agent is an executable
 chmod +x ${OPENSHIFT_LOGENTRIES_DIR}bin/logentries/le
+
 ${OPENSHIFT_LOGENTRIES_DIR}bin/logentries/le register --hostname=${OPENSHIFT_APP_NAME} --account-key=${OPENSHIFT_LOGENTRIES_KEY}
+
 # We don't want just OPENSHIFT_LOG_DIR as it could be a duplicate
 for dir in `env | grep OPENSHIFT_.*_LOG_DIR`
 do
-logdir=${dir#*=}
-for logf in `ls $logdir`
-do
-# Check if its access or error log
-if [[ $logf == *_log-* ]]
-then
-# Navigate to the log directory
-pushd $logdir > /dev/null
-# Get the full filename without timestamp
-filename="$logdir${logf%%-*}-*"
-# Follow any new logs and make sure existing ones are being followed
-${OPENSHIFT_REPO_DIR}logentries/le follow "$filename"
-popd > /dev/null
-fi
+        logdir=${dir#*=}
+        for logf in `ls $logdir`
+        do
+                # Check if its access or error log
+                if [[ $logf == *_log-* ]]
+                then
+                        # Navigate to the log directory
+                        pushd $logdir > /dev/null
+
+                        # Get the full filename without timestamp
+                        filename="$logdir${logf%%-*}-*"
+
+                        # Follow any new logs and make sure existing ones are being followed
+                        ${OPENSHIFT_REPO_DIR}logentries/le follow "$filename"
+
+                        popd > /dev/null
+                fi
+        done
 done
-done
+
 # Start monitoring the log files
 ${OPENSHIFT_LOGENTRIES_DIR}bin/logentries/le monitordaemon
