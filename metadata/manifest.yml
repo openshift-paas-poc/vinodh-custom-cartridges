@@ -1,0 +1,28 @@
+---
+Name: logentries
+Cartridge-Short-Name: LOGENTRIES
+Architecture: x86_64
+Display-Name: logentries 1.0
+Description: Logentries is a log monitor service
+Version: '1.0'
+Versions:
+- '1.0'
+Cartridge-Version: 0.0.1
+Cartridge-Vendor: vinodh
+License: GPL
+Vendor: vinodh
+Categories:
+- service
+- embedded
+Website: http://www.logentries.com
+Provides:
+- logentries-1.0
+- le
+Scaling:
+Min: 1
+Max: -1
+Group-Overrides:
+- components:
+- logentries-1.0
+- web_framework
+Source-Url: https://github.com/openshift-paas-poc/vinodh-custom-cartridges.git
